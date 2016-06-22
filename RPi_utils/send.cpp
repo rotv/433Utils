@@ -5,7 +5,7 @@
   [] = optional
  */
 
-#include "RCSwitch.h"
+#include "../rc-switch/RCSwitch.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -40,5 +40,5 @@ int main(int argc, char *argv[]) {
             printf("command[%i] is unsupported\n", command);
             return -1;
     }
-	return 0;
+    return 0;
 }
