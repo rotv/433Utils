@@ -17,7 +17,6 @@ or your remote control)
 #include "../rc-switch/RCSwitch.h"
 #include <stdlib.h>
 #include <stdio.h>
-     
 
 int main(int argc, char *argv[]) {
     
