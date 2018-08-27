@@ -1,12 +1,17 @@
 /*
-Usage: ./send systemcode unitcode command [protocol] [pulselength]
-systemcode  - string representation of DIP switches, e.g. "00100"
-unitcode    - string representation of units (A..E) to command, e.g. "10000" (A)
-command     - "on" or "off", turns the switches on or off
-protocol    - According to rc-switch definitions
-pulselength - pulselength in microseconds
-*/
+Usage: ./send <systemCode> <unitCode> <command> [protocol] [pulseLength]
+Sends a tri-state code (e.g. 433Mhz protocol) on a GPIO.
 
+systemCode  -  DIP switch settings, e.g. "00100"
+unitCode    - switch number [1..5] or pin pattern corresponding to the buttons pressed [10000..00001]
+command     - turns the specified switches on or off, 0 for off or 1 for on
+protocol    - optional. according to rc-switch definitions
+pulseLength - optional. pulselength in microseconds
+
+Examples:
+    ./send 00100 10000 0          - Turns switch 1/A off
+    ./send 00100 00010 1 2 150    - Turns switch 4/D on
+*/
 #include "../rc-switch/RCSwitch.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -19,15 +24,15 @@ int main(int argc, char *argv[]) {
         printf("Usage: %s <systemCode> <unitCode> <command> [protocol] [pulseLength]\n", argv[0]);
         printf("Sends a tri-state code (e.g. 433Mhz protocol) on a GPIO.\n");
         printf("\n");
-        printf("systemCode\t-  DIP switch settings, e.g. \"00100\"\n");
-        printf("unitCode\t- switch number [1..5] or pin pattern corresponding to the buttons pressed [10000..00001]\n");
-        printf("command\t - turns the specified switches on or off, 0 for off or 1 for on\n");
-        printf("protocol\t- optional. according to rc-switch definitions\n");
-        printf("pulseLength\t- optional. pulselength in microseconds\n");
+        printf("systemCode  -  DIP switch settings, e.g. \"00100\"\n");
+        printf("unitCode    - switch number [1..5] or pin pattern corresponding to the buttons pressed [10000..00001]\n");
+        printf("command     - turns the specified switches on or off, 0 for off or 1 for on\n");
+        printf("protocol    - optional. according to rc-switch definitions\n");
+        printf("pulseLength - optional. pulselength in microseconds\n");
         printf("\n");
         printf("Examples:\n");
-        printf("\t%s 00100 10000 0\n\t- Turns switch 1/A off", argv[0]);
-        printf("\t%s 00100 00010 1 2 150\n\t- Turns switch 4/D on", argv[0]);
+        printf("    %s 00100 10000 0          - Turns switch 1/A off\n", argv[0]);
+        printf("    %s 00100 00010 1 2 150    - Turns switch 4/D on\n", argv[0]);
         return -1;
     }
 
