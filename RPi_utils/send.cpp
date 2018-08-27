@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
         printf("error: unitCode[%s] is unsupported\n", argv[2]);
         return -1;
     }
-    const int  command  = atoi(argv[3]);
+    const int command  = atoi(argv[3]);
     int protocol = 0; // A value of 0 will use rc-switch's default value
     int pulseLength = 0;
     
@@ -69,16 +69,19 @@ int main(int argc, char *argv[]) {
     if (argc >= 5) protocol = atoi(argv[4]);
     if (argc >= 6) pulseLength = atoi(argv[5]);
 
-    printf("sending systemCode[%s] unitCode[%s] command[%s]\n", systemCode, unitCode, command);
+    printf("sending systemCode[%s] unitCode[%s] command[%i]\n", systemCode, unitCode, command);
     RCSwitch mySwitch = RCSwitch();
     if (protocol != 0) mySwitch.setProtocol(protocol);
     if (pulseLength != 0) mySwitch.setPulseLength(pulseLength);
     mySwitch.enableTransmit(PIN);
     
-    if (command) {
+    if (command == 1) {
         mySwitch.switchOn(systemCode, unitCode);
-	} else {
+	} else if (command == 0) {
 		mySwitch.switchOff(systemCode, unitCode);
-    }
+    } else {
+        printf("error: command[%i] is unsupported\n", command);
+        return -1;
+	}
     return 0;
 }
