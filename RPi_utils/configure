@@ -27,7 +27,7 @@ for arg in "$@"; do
 done
 
 echo 'generating makefile ...'
-echo "PREFIX = $prefix" >Makefile
+echo "PREFIX=$prefix" >Makefile
 if $debugsym; then
 	echo 'dbg = -g' >>Makefile
 fi
