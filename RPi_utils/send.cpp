@@ -15,6 +15,9 @@ Examples:
 #include "../rc-switch/RCSwitch.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <wiringPi.h>
+#include <unistd.h>
+#include <sys/file.h>
 
 int main(int argc, char *argv[]) {
     
@@ -49,10 +52,10 @@ int main(int argc, char *argv[]) {
      */
     int PIN = 0;
 
-	const char* code[6] = { "00000", "10000", "01000", "00100", "00010", "00001" };
+    const char* code[6] = { "00000", "10000", "01000", "00100", "00010", "00001" };
     
-	const char* systemCode = argv[1];
-	const char* unitCode;
+    const char* systemCode = argv[1];
+    const char* unitCode;
     if (strlen(argv[2]) == 5) {
         unitCode = argv[2];
     } else if (atoi(argv[2]) > 0 and atoi(argv[2]) < 6) {
@@ -75,13 +78,21 @@ int main(int argc, char *argv[]) {
     if (pulseLength != 0) mySwitch.setPulseLength(pulseLength);
     mySwitch.enableTransmit(PIN);
     
+    // Obtain advisory lock (exclusive), flock will block until successful
+    FILE *lockfile = fopen("/var/lock/gpio-send.lock", "w+");
+	int res = flock(fileno(lockfile), LOCK_EX);
+
+    // Send the command
     if (command == 1) {
         mySwitch.switchOn(systemCode, unitCode);
-	} else if (command == 0) {
-		mySwitch.switchOff(systemCode, unitCode);
+    } else if (command == 0) {
+        mySwitch.switchOff(systemCode, unitCode);
     } else {
         printf("error: command[%i] is unsupported\n", command);
         return -1;
-	}
+    }
+
+    // Close the lock file (not sure this is needed..)
+    fclose(lockfile);
     return 0;
 }
