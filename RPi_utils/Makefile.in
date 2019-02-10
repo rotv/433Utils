@@ -3,7 +3,8 @@
 CXXFLAGS=-DRPI
 LDFLAGS=-lwiringPi -lwiringPiDev -lcrypt
 
-.PHONY: all
+.PHONY: all clean install uninstall
+
 all: send codesend RFSniffer
 
 send: ../rc-switch/RCSwitch.o send.o
@@ -15,19 +16,15 @@ codesend: ../rc-switch/RCSwitch.o codesend.o
 RFSniffer: ../rc-switch/RCSwitch.o RFSniffer.o
 	$(CXX) $(CXXFLAGS) $+ -o $@ $(LDFLAGS)
 
-.PHONY: clean
 clean:
 	$(RM) ../rc-switch/*.o *.o send codesend servo RFSniffer
 
-
-.PHONY: install
 install: send codesend RFSniffer
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp send $(DESTDIR)$(PREFIX)/bin/send
 	cp codesend $(DESTDIR)$(PREFIX)/bin/codesend
 	cp RFSniffer $(DESTDIR)$(PREFIX)/bin/RFSniffer
 
-.PHONY: uninstall
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/send
 	rm -f $(DESTDIR)$(PREFIX)/bin/codesend
