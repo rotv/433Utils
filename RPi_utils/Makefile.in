@@ -1,7 +1,8 @@
 
 # Defines the RPI variable which is needed by rc-switch/RCSwitch.h
 CXXFLAGS=-DRPI
-LDFLAGS=-lwiringPi -lwiringPiDev -lcrypt
+#LDFLAGS=-lwiringPi -lwiringPiDev -lcrypt
+LDFLAGS=-lwiringPi -lcrypt
 
 .PHONY: all clean install uninstall
 
@@ -20,12 +21,20 @@ clean:
 	$(RM) ../rc-switch/*.o *.o send codesend servo RFSniffer
 
 install: send codesend RFSniffer
+	@if [ "$$(id -u)" -ne 0 ]; then \
+		echo "Error: You must run 'sudo make install' or be root."; \
+		exit 1; \
+	fi
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp send $(DESTDIR)$(PREFIX)/bin/send
 	cp codesend $(DESTDIR)$(PREFIX)/bin/codesend
 	cp RFSniffer $(DESTDIR)$(PREFIX)/bin/RFSniffer
 
 uninstall:
+	@if [ "$$(id -u)" -ne 0 ]; then \
+		echo "Error: You must run 'sudo make install' or be root."; \
+		exit 1; \
+	fi
 	rm -f $(DESTDIR)$(PREFIX)/bin/send
 	rm -f $(DESTDIR)$(PREFIX)/bin/codesend
 	rm -f $(DESTDIR)$(PREFIX)/bin/RFSniffer
