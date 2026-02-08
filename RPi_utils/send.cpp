@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
     if (argc >= 5) protocol = atoi(argv[4]);
     if (argc >= 6) pulseLength = atoi(argv[5]);
 
-    printf("sending systemCode[%s] unitCode[%s] command[%i]\n", systemCode, unitCode, command);
+    //debug: printf("sending systemCode[%s] unitCode[%s] command[%i]\n", systemCode, unitCode, command);
     RCSwitch mySwitch = RCSwitch();
     if (protocol != 0) mySwitch.setProtocol(protocol);
     if (pulseLength != 0) mySwitch.setPulseLength(pulseLength);
